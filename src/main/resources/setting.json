@@ -1,0 +1,15 @@
+{
+  "admin": [
+    123456,
+    2222
+  ],
+  "token": "githubToken",
+  "project": [
+    {
+      "name": "作者/仓库名",
+      "branch": "分支"
+    }
+  ],
+  "group": [
+  ]
+}
