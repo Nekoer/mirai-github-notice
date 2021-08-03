@@ -16,7 +16,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation("org.wso2.apache.httpcomponents:httpclient:4.3.1.wso2v1")
+    implementation("org.apache.httpcomponents:httpclient:4.5.13")
     implementation("com.squareup.okhttp3:okhttp:4.2.2")
     implementation("com.alibaba:fastjson:1.2.76")
 }
