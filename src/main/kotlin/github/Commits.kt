@@ -15,6 +15,8 @@ import com.hcyacg.GithubTask.Companion.users
 import net.mamoe.mirai.Bot
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.getGroupOrNull
+import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.RichMessage
 import net.mamoe.mirai.utils.MiraiExperimentalApi
@@ -35,7 +37,7 @@ class Commits {
      * 检查github推送更新
      */
     suspend fun checkUpdate(
-        event: CommandSender,
+        event: MessageEvent,
         projects: Any?,
         branch: Any?,
         index: Int
@@ -90,27 +92,20 @@ class Commits {
                 if (num >= project.size) {
 
                     for (e in groups) {
-                        event.user?.id
-
-                        logger.warning(event.bot.toString())
-                        logger.warning(event.user?.id.toString())
 
 //                        for (i in event.bot?.groups?.toList()?.withIndex()!!) { logger.warning(i.toString()) }
 
 //                        logger.warning("${null != event.bot!!.getGroup(e.toString().toLong())} => ${event.bot!!.getGroup(e.toString().toLong())}")
                         //BUG注 需判断该机器人群组是否存在该群
-                        if (null != event.bot?.getGroup(e.toString().toLong())) {
-                            event.bot?.getGroup(e.toString().toLong())?.sendMessage(
-                                process(
-                                    message = message.toString(),
-                                    html = html.toString(),
-                                    avatar = avatar.toString(),
-                                    time = time.toString(),
-                                    name = name.toString()
-                                )
+                        event.bot.getGroup(e.toString().toLong())?.sendMessage(
+                            process(
+                                message = message.toString(),
+                                html = html.toString(),
+                                avatar = avatar.toString(),
+                                time = time.toString(),
+                                name = name.toString()
                             )
-
-                        }
+                        )
 
 //                        event.bot.getGroup(e.toString().toLong())?.sendMessage("${name}推送了代码\n${message}\n${time}\n${html}")
                     }

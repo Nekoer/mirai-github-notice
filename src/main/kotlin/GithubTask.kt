@@ -8,6 +8,8 @@ import com.alibaba.fastjson.JSONObject
 import com.hcyacg.github.Commits
 import kotlinx.coroutines.*
 import net.mamoe.mirai.console.command.CommandSender
+import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.utils.MiraiLogger
 import java.util.*
 
@@ -23,7 +25,7 @@ class GithubTask {
         var users: JSONArray = JSONArray.parseArray("[]")
         var admin: JSONArray = JSONArray.parseArray("[]")
         var project: JSONArray = JSONArray.parseArray("[]")
-
+        var event : GroupMessageEvent? = null
     }
     /**
      * 开启推送通知,循环仓库
@@ -33,7 +35,8 @@ class GithubTask {
 
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun openTask(event: CommandSender) {
+    fun openTask() {
+        logger.info(event?.bot?.id.toString())
         logger.info("Github推送通知已开启")
         try{
             time.purge()
@@ -42,12 +45,14 @@ class GithubTask {
                     for ((index, e) in project.withIndex()) {
                         val j: JSONObject = JSONObject.parseObject(e.toString())
                         runBlocking{
-                            Commits().checkUpdate(
-                                event = event,
-                                projects = j["name"],
-                                branch = j["branch"],
-                                index = index
-                            )
+                            event?.let {
+                                Commits().checkUpdate(
+                                    event = it,
+                                    projects = j["name"],
+                                    branch = j["branch"],
+                                    index = index
+                                )
+                            }
                         }
                     }
                     if (!switch) {
