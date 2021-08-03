@@ -2,13 +2,19 @@ package com.hcyacg.initial
 
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
+import com.hcyacg.GithubNotice
+import com.hcyacg.GithubTask
 import com.hcyacg.GithubTask.Companion.admin
+import com.hcyacg.GithubTask.Companion.branches
 import com.hcyacg.GithubTask.Companion.groups
 import com.hcyacg.GithubTask.Companion.num
 import com.hcyacg.GithubTask.Companion.project
 import com.hcyacg.GithubTask.Companion.sha
+import com.hcyacg.GithubTask.Companion.taskMillisecond
 import com.hcyacg.GithubTask.Companion.token
 import com.hcyacg.GithubTask.Companion.users
+import com.hcyacg.github.Branches
+import kotlinx.coroutines.runBlocking
 
 import net.mamoe.mirai.utils.MiraiLogger
 
@@ -59,10 +65,13 @@ class Configurations {
          */
         fun load() {
             projectJson = JSONObject.parseObject(file.readText())
+
             project = JSON.parseArray(projectJson.getString("project"))
-            for ((index, e) in project.withIndex()) {
-                sha[JSONObject.parseObject(e.toString()).getString("name")] = ""
+            for (e in project) {
+                sha[e.toString()] = ""
             }
+
+
             groups = JSON.parseArray(projectJson.getString("group"))
             for ((index, e) in groups.withIndex()) {
                 groups[index] = e.toString()
@@ -77,6 +86,18 @@ class Configurations {
             }
 
             token = projectJson.getString("token")
+            taskMillisecond = projectJson.getLong("task-millisecond")
+
+
+            runBlocking {
+                branches = Branches().getBranchesByRepo(project)
+            }
+            GithubTask.all = 0
+            for (p in project){
+                GithubTask.all += branches[p]!!.size
+            }
+
+            GithubNotice.logger.info("加载配置完成 共${GithubTask.all}个分支")
         }
     }
 

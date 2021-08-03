@@ -3,12 +3,10 @@
     123456,
     2222
   ],
+  "task-millisecond": 5000,
   "token": "githubToken",
   "project": [
-    {
-      "name": "作者/仓库名",
-      "branch": "分支"
-    }
+      "作者/仓库名"
   ],
   "group": [
     1548

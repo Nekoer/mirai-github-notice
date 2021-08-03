@@ -1,7 +1,11 @@
 package com.hcyacg
 
 
+import com.hcyacg.GithubTask.Companion.all
 import com.hcyacg.command.Github
+
+import com.hcyacg.github.RateLimit
+import com.hcyacg.initial.Configurations
 import com.hcyacg.initial.Configurations.Companion.init
 
 
@@ -10,6 +14,9 @@ import net.mamoe.mirai.console.command.CommandManager
 import net.mamoe.mirai.console.extension.PluginComponentStorage
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
+import net.mamoe.mirai.event.GlobalEventChannel
+import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.message.data.content
 import net.mamoe.mirai.utils.info
 
 
@@ -29,9 +36,13 @@ object GithubNotice : KotlinPlugin(
     override fun onEnable() {
         CommandManager.registerCommand(Github(),true)
         logger.info { "github更新通知 loaded" }
-//        GlobalEventChannel.subscribeAlways<GroupMessageEvent> { event ->
-//            GithubTask.event = event
-//        }
+        GlobalEventChannel.subscribeAlways<GroupMessageEvent> { event ->
+
+            if (event.message.content.indexOf("/github rate_limit")>= 0){
+                RateLimit().getRateLimit(event)
+            }
+
+        }
     }
 
 
@@ -43,6 +54,7 @@ object GithubNotice : KotlinPlugin(
      */
     override fun PluginComponentStorage.onLoad() {
         init()
+
     }
 
 

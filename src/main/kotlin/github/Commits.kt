@@ -3,6 +3,8 @@ package com.hcyacg.github
 import com.alibaba.fastjson.JSONObject
 import com.hcyacg.GithubNotice
 import com.hcyacg.GithubTask
+import com.hcyacg.GithubTask.Companion.all
+import com.hcyacg.GithubTask.Companion.branches
 import com.hcyacg.GithubTask.Companion.groups
 import com.hcyacg.GithubTask.Companion.logger
 import com.hcyacg.GithubTask.Companion.num
@@ -39,7 +41,6 @@ class Commits {
     suspend fun checkUpdate(
         projects: Any?,
         branch: Any?,
-        index: Int
     ) {
         var name: Any? = null
         var time: Any? = null
@@ -47,11 +48,9 @@ class Commits {
         var avatar: Any? = null
         var message: Any? = null
         var stA: String? = null
-        var sha1: Any? = null
         var response: Response? = null
 //        logger.warning("${projects.toString()} => ${branch.toString()}")
         val bots = Bot.instances
-
         try {
             val request: Request = Request.Builder()
                 .url("https://api.github.com/repos/${projects.toString()}/commits/${branch.toString()}")
@@ -66,11 +65,17 @@ class Commits {
             val jsonObject: JSONObject? = JSONObject.parseObject(stA)
 
             if (null != jsonObject) {
-                val sha1: Any? = jsonObject["sha"]
-                if (sha[projects].contentEquals(sha1.toString())) {
+                if (sha["${projects}/$branch"].contentEquals(jsonObject["sha"].toString())) {
                     return
                 }
-                sha[projects.toString()] = sha1.toString()
+                if (null == sha["${projects}/$branch"]){
+                    sha["${projects}/$branch"] = jsonObject["sha"].toString()
+                    return
+                }
+//                logger.warning("${sha["${projects}/$branch"]} => $sha1")
+
+                sha["${projects}/$branch"] = jsonObject["sha"].toString()
+
 
                 val commit: Any? = jsonObject["commit"]
                 val committer: Any? = JSONObject.parseObject(commit.toString())["committer"]
@@ -88,10 +93,9 @@ class Commits {
                 val committers: Any? = jsonObject["committer"]
                 avatar = JSONObject.parseObject(committers.toString())["avatar_url"]
 
-                if (num >= project.size) {
 
                     for (e in groups) {
-                        for ((index,bot) in bots.withIndex()){
+                        for (bot in bots){
                             bot.getGroup(e.toString().toLong())?.sendMessage(
                                 process(
                                     message = message.toString(),
@@ -109,7 +113,7 @@ class Commits {
                     }
 
                     for (u in users) {
-                        for ((index,bot) in bots.withIndex()){
+                        for (bot in bots){
                             bot.getStranger(u.toString().toLong())?.sendMessage(
                                 process(
                                     message = message.toString(),
@@ -122,9 +126,7 @@ class Commits {
                         }
 
                     }
-                } else {
-                    num += 1
-                }
+
             }
             response.closeQuietly()
         } catch (e: Exception) {

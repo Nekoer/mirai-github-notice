@@ -3,6 +3,8 @@ package com.hcyacg
 
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.hcyacg.entity.Branch
+import com.hcyacg.github.Branches
 
 
 import com.hcyacg.github.Commits
@@ -25,7 +27,10 @@ class GithubTask {
         var users: JSONArray = JSONArray.parseArray("[]")
         var admin: JSONArray = JSONArray.parseArray("[]")
         var project: JSONArray = JSONArray.parseArray("[]")
-//        var event : GroupMessageEvent? = null
+        var branches  = HashMap<String,List<Branch>>()
+        var all:Int = 0
+        var taskMillisecond:Long = 5000
+
     }
     /**
      * 开启推送通知,循环仓库
@@ -41,14 +46,18 @@ class GithubTask {
             time.purge()
             time.schedule(object : TimerTask() {
                 override fun run() {
-                    for ((index, e) in project.withIndex()) {
-                        val j: JSONObject = JSONObject.parseObject(e.toString())
+                    for (e in project) {
+//                        val j: JSONObject = JSONObject.parseObject(e.toString())
                         runBlocking{
+                            val list: List<Branch> = branches[e.toString()]!!
+                            for (o in list){
+//                                logger.warning(o.toString())
                                 Commits().checkUpdate(
-                                    projects = j["name"],
-                                    branch = j["branch"],
-                                    index = index
+                                    projects = e,
+                                    branch = o.name,
                                 )
+                            }
+
                         }
                     }
                     if (!switch) {
@@ -56,7 +65,7 @@ class GithubTask {
                         logger.info("Github推送通知已关闭")
                     }
                 }
-            }, Date(), 5000)
+            }, Date(), taskMillisecond)
         }catch (e:Exception){
             e.printStackTrace()
         }
