@@ -1,21 +1,17 @@
 package com.hcyacg
 
 
-import com.hcyacg.command.Commands
+import com.hcyacg.command.Github
+import com.hcyacg.initial.Configuration
 import com.hcyacg.initial.Configuration.Companion.init
+
 
 import net.mamoe.mirai.console.command.CommandManager
 
 import net.mamoe.mirai.console.extension.PluginComponentStorage
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
-import net.mamoe.mirai.event.GlobalEventChannel
-import net.mamoe.mirai.event.events.GroupMessageEvent
-
 import net.mamoe.mirai.utils.info
-import okhttp3.*
-
-import java.util.concurrent.TimeUnit
 
 
 object GithubNotice : KotlinPlugin(
@@ -28,16 +24,15 @@ object GithubNotice : KotlinPlugin(
         info("""github更新通知""")
     }
 ) {
-    val client = OkHttpClient().newBuilder().connectTimeout(60000, TimeUnit.MILLISECONDS)
-    .readTimeout(60000, TimeUnit.MILLISECONDS)
+
 
 
     override fun onEnable() {
-        CommandManager.registerCommand(Commands,true)
+        CommandManager.registerCommand(Github(),true)
 
         logger.info { "Plugin loaded" }
-        GlobalEventChannel.subscribeAlways<GroupMessageEvent> { event ->
-        }
+//        GlobalEventChannel.subscribeAlways<GroupMessageEvent> { event ->
+//        }
     }
 
 

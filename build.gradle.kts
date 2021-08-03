@@ -1,5 +1,5 @@
 plugins {
-    val kotlinVersion = "1.5.10"
+    val kotlinVersion = "1.5.21"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
 
@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.hcyacg"
-version = "1.0-SNAPSHOT"
+version = "1.1"
 
 repositories {
     mavenLocal()
