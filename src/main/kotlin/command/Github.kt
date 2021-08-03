@@ -9,6 +9,7 @@ import com.hcyacg.initial.Configuration
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.console.command.CompositeCommand
+import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import net.mamoe.mirai.utils.MiraiLogger
 

@@ -90,9 +90,12 @@ class Commits {
                 if (num >= project.size) {
 
                     for (e in groups) {
-                        logger.warning(event.bot.toString())
+                        event.user?.id
 
-                        for (i in event.bot?.groups?.toList()?.withIndex()!!) { logger.warning(i.toString()) }
+                        logger.warning(event.bot.toString())
+                        logger.warning(event.user?.id.toString())
+
+//                        for (i in event.bot?.groups?.toList()?.withIndex()!!) { logger.warning(i.toString()) }
 
 //                        logger.warning("${null != event.bot!!.getGroup(e.toString().toLong())} => ${event.bot!!.getGroup(e.toString().toLong())}")
                         //BUG注 需判断该机器人群组是否存在该群
