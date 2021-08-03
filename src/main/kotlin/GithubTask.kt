@@ -25,7 +25,7 @@ class GithubTask {
         var users: JSONArray = JSONArray.parseArray("[]")
         var admin: JSONArray = JSONArray.parseArray("[]")
         var project: JSONArray = JSONArray.parseArray("[]")
-        var event : GroupMessageEvent? = null
+//        var event : GroupMessageEvent? = null
     }
     /**
      * 开启推送通知,循环仓库
@@ -35,8 +35,7 @@ class GithubTask {
 
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun openTask() {
-        logger.info(event?.bot?.id.toString())
+    suspend fun openTask() {
         logger.info("Github推送通知已开启")
         try{
             time.purge()
@@ -45,14 +44,11 @@ class GithubTask {
                     for ((index, e) in project.withIndex()) {
                         val j: JSONObject = JSONObject.parseObject(e.toString())
                         runBlocking{
-                            event?.let {
                                 Commits().checkUpdate(
-                                    event = it,
                                     projects = j["name"],
                                     branch = j["branch"],
                                     index = index
                                 )
-                            }
                         }
                     }
                     if (!switch) {

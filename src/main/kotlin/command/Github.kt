@@ -11,6 +11,7 @@ import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import net.mamoe.mirai.utils.MiraiLogger
+import net.mamoe.mirai.utils.info
 
 class Github : CompositeCommand(
     GithubNotice,
@@ -22,7 +23,6 @@ class Github : CompositeCommand(
     @OptIn(ExperimentalCommandDescriptors::class, net.mamoe.mirai.console.util.ConsoleExperimentalApi::class)
     @SubCommand("start","启动")
     suspend fun CommandSender.start() {
-        val event = (this as? CommandSenderOnMessage<*>)?.fromEvent
         switch = true
         GithubTask().openTask()
     }

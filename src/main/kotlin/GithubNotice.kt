@@ -34,7 +34,7 @@ object GithubNotice : KotlinPlugin(
         CommandManager.registerCommand(Github(),true)
         logger.info { "Plugin loaded" }
         GlobalEventChannel.subscribeAlways<GroupMessageEvent> { event ->
-            GithubTask.event = event
+//            GithubTask.event = event
         }
     }
 

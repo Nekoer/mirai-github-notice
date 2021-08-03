@@ -37,7 +37,6 @@ class Commits {
      * 检查github推送更新
      */
     suspend fun checkUpdate(
-        event: MessageEvent,
         projects: Any?,
         branch: Any?,
         index: Int
@@ -51,7 +50,7 @@ class Commits {
         var sha1: Any? = null
         var response: Response? = null
         logger.warning("${projects.toString()} => ${branch.toString()}")
-
+        val bots = Bot.instances
 
         try {
             val request: Request = Request.Builder()
@@ -92,28 +91,26 @@ class Commits {
                 if (num >= project.size) {
 
                     for (e in groups) {
-
-//                        for (i in event.bot?.groups?.toList()?.withIndex()!!) { logger.warning(i.toString()) }
-
-//                        logger.warning("${null != event.bot!!.getGroup(e.toString().toLong())} => ${event.bot!!.getGroup(e.toString().toLong())}")
-                        //BUG注 需判断该机器人群组是否存在该群
-                        event.bot.getGroup(e.toString().toLong())?.sendMessage(
-                            process(
-                                message = message.toString(),
-                                html = html.toString(),
-                                avatar = avatar.toString(),
-                                time = time.toString(),
-                                name = name.toString()
+                        for ((index,bot) in bots.withIndex()){
+                            bot.getGroup(e.toString().toLong())?.sendMessage(
+                                process(
+                                    message = message.toString(),
+                                    html = html.toString(),
+                                    avatar = avatar.toString(),
+                                    time = time.toString(),
+                                    name = name.toString()
+                                )
                             )
-                        )
 
+
+                        }
+                        //BUG注 需判断该机器人群组是否存在该群
 //                        event.bot.getGroup(e.toString().toLong())?.sendMessage("${name}推送了代码\n${message}\n${time}\n${html}")
                     }
 
                     for (u in users) {
-
-                        if (null != event.bot?.getStranger(u.toString().toLong())) {
-                            event.bot?.getStranger(u.toString().toLong())?.sendMessage(
+                        for ((index,bot) in bots.withIndex()){
+                            bot.getStranger(u.toString().toLong())?.sendMessage(
                                 process(
                                     message = message.toString(),
                                     html = html.toString(),
