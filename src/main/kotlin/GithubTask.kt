@@ -40,17 +40,14 @@ class GithubTask {
             time.schedule(object : TimerTask() {
                 override fun run() {
                     for ((index, e) in project.withIndex()) {
-
                         val j: JSONObject = JSONObject.parseObject(e.toString())
-                        suspend fun myFunc() = coroutineScope {
-                            launch {
-                                Commits().checkUpdate(
-                                    event = event,
-                                    projects = j["name"],
-                                    branch = j["branch"],
-                                    index = index
-                                )
-                            }
+                        runBlocking{
+                            Commits().checkUpdate(
+                                event = event,
+                                projects = j["name"],
+                                branch = j["branch"],
+                                index = index
+                            )
                         }
                     }
                     if (!switch) {

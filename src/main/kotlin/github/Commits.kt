@@ -47,7 +47,7 @@ class Commits {
         var stA: String? = null
         var sha1: Any? = null
         var response: Response? = null
-        logger.warning("${projects.toString()} => ${branch.toString()}")
+//        logger.warning("${projects.toString()} => ${branch.toString()}")
 
 
         try {
