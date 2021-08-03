@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject
 
 import com.hcyacg.github.Commits
 import kotlinx.coroutines.*
+import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.utils.MiraiLogger
 import java.util.*
 
@@ -32,7 +33,7 @@ class GithubTask {
 
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun openTask() {
+    fun openTask(event: CommandSender) {
         logger.info("Github推送通知已开启")
         time.purge()
 
@@ -43,6 +44,7 @@ class GithubTask {
                     suspend fun myFunc() = coroutineScope {
                         launch {
                             Commits().checkUpdate(
+                                event = event,
                                 projects = j["name"],
                                 branch = j["branch"],
                                 index = index

@@ -7,7 +7,9 @@ import com.hcyacg.GithubTask.Companion.switch
 
 import com.hcyacg.initial.Configuration
 import net.mamoe.mirai.console.command.CommandSender
+import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.console.command.CompositeCommand
+import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import net.mamoe.mirai.utils.MiraiLogger
 
 class Github : CompositeCommand(
@@ -18,9 +20,16 @@ class Github : CompositeCommand(
     var logger: MiraiLogger = MiraiLogger.create("Bot")
 
     @SubCommand("start","启动")
-    fun CommandSender.start() {
+    suspend fun CommandSender.start() {
+        val sourceMessage = (this as? CommandSenderOnMessage<*>)?.fromEvent?.message
+        if (sourceMessage != null) {
+
+            sendMessage(sourceMessage.quote() + "OK")
+        } else {
+            sendMessage("OK")
+        }
         switch = true
-        GithubTask().openTask()
+        GithubTask().openTask(this)
     }
 
     @SubCommand("stop","关闭")

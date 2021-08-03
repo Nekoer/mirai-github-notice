@@ -12,6 +12,7 @@ import com.hcyacg.GithubTask.Companion.users
 
 
 import net.mamoe.mirai.Bot
+import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.RichMessage
 import net.mamoe.mirai.utils.MiraiExperimentalApi
@@ -32,6 +33,7 @@ class Commits {
      * 检查github推送更新
      */
     suspend fun checkUpdate(
+        event: CommandSender,
         projects: Any?,
         branch: Any?,
         index: Int
@@ -82,40 +84,40 @@ class Commits {
                 avatar = JSONObject.parseObject(committers.toString())["avatar_url"]
 
                 if (num >= project.size) {
-                    val instances = Bot.instances
-                    for (e in groups) {
-                        for (bot in instances) {
-                            //BUG注 需判断该机器人群组是否存在该群
-                            if (null != bot.getGroup(e.toString().toLong())) {
-                                bot.getGroup(e.toString().toLong())?.sendMessage(
-                                    process(
-                                        message = message.toString(),
-                                        html = html.toString(),
-                                        avatar = avatar.toString(),
-                                        time = time.toString(),
-                                        name = name.toString()
-                                    )
-                                )
 
-                            }
+                    for (e in groups) {
+
+                        //BUG注 需判断该机器人群组是否存在该群
+                        if (null != event.bot?.getGroup(e.toString().toLong())) {
+                            event.bot?.getGroup(e.toString().toLong())?.sendMessage(
+                                process(
+                                    message = message.toString(),
+                                    html = html.toString(),
+                                    avatar = avatar.toString(),
+                                    time = time.toString(),
+                                    name = name.toString()
+                                )
+                            )
+
                         }
+
 //                        event.bot.getGroup(e.toString().toLong())?.sendMessage("${name}推送了代码\n${message}\n${time}\n${html}")
                     }
 
                     for (u in users) {
-                        for (bot in instances) {
-                            if (null != bot.getStranger(u.toString().toLong())) {
-                                bot.getStranger(u.toString().toLong())?.sendMessage(
-                                    process(
-                                        message = message.toString(),
-                                        html = html.toString(),
-                                        avatar = avatar.toString(),
-                                        time = time.toString(),
-                                        name = name.toString()
-                                    )
+
+                        if (null != event.bot?.getStranger(u.toString().toLong())) {
+                            event.bot?.getStranger(u.toString().toLong())?.sendMessage(
+                                process(
+                                    message = message.toString(),
+                                    html = html.toString(),
+                                    avatar = avatar.toString(),
+                                    time = time.toString(),
+                                    name = name.toString()
                                 )
-                            }
+                            )
                         }
+
                     }
                 } else {
                     num += 1
