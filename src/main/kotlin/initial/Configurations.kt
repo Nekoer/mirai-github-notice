@@ -2,7 +2,6 @@ package com.hcyacg.initial
 
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
-import com.hcyacg.GithubTask
 import com.hcyacg.GithubTask.Companion.admin
 import com.hcyacg.GithubTask.Companion.groups
 import com.hcyacg.GithubTask.Companion.num
@@ -10,21 +9,20 @@ import com.hcyacg.GithubTask.Companion.project
 import com.hcyacg.GithubTask.Companion.sha
 import com.hcyacg.GithubTask.Companion.token
 import com.hcyacg.GithubTask.Companion.users
-import kotlinx.coroutines.DelicateCoroutinesApi
 
 import net.mamoe.mirai.utils.MiraiLogger
 
 import java.io.File
 import java.io.InputStream
 
-class Configuration {
+class Configurations {
     companion object {
         private val systemPath: String = System.getProperty("user.dir")
         private val fileDirectory: File =
             File(systemPath + File.separator + "config" + File.separator + "com.hcyacg.github-notice")
         val file: File = File(fileDirectory.path + File.separator + "setting.json")
         var projectJson: JSONObject = JSONObject.parseObject("{}")
-        val path: String = Configuration::class.java.protectionDomain.codeSource.location.path
+        val path: String = Configurations::class.java.protectionDomain.codeSource.location.path
         var logger: MiraiLogger = MiraiLogger.create("Bot")
 
         /**
@@ -39,7 +37,7 @@ class Configuration {
                 fileDirectory.mkdirs()
                 file.createNewFile()
                 val resourceAsStream: InputStream? =
-                    Configuration::class.java.classLoader.getResourceAsStream("setting.json")
+                    Configurations::class.java.classLoader.getResourceAsStream("setting.json")
                 resourceAsStream?.let { file.writeBytes(it.readAllBytes()) }
                 logger.warning("初始化配置文件,请在config/com.hcyacg.github-notice/setting.json配置相关参数")
             } else {
@@ -81,4 +79,6 @@ class Configuration {
             token = projectJson.getString("token")
         }
     }
+
+
 }

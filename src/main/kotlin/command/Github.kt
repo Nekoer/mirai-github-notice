@@ -3,15 +3,12 @@ package com.hcyacg.command
 import com.hcyacg.GithubNotice
 import com.hcyacg.GithubTask
 import com.hcyacg.GithubTask.Companion.switch
+import com.hcyacg.initial.Configurations
+import com.hcyacg.initial.Configurations.Companion.overload
 
 
-import com.hcyacg.initial.Configuration
 import net.mamoe.mirai.console.command.*
-import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
-import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.message.data.MessageSource.Key.quote
 import net.mamoe.mirai.utils.MiraiLogger
-import net.mamoe.mirai.utils.info
 
 class Github : CompositeCommand(
     GithubNotice,
@@ -20,7 +17,6 @@ class Github : CompositeCommand(
 ) {
     var logger: MiraiLogger = MiraiLogger.create("Bot")
 
-    @OptIn(ExperimentalCommandDescriptors::class, net.mamoe.mirai.console.util.ConsoleExperimentalApi::class)
     @SubCommand("start","启动")
     suspend fun CommandSender.start() {
         switch = true
@@ -35,9 +31,7 @@ class Github : CompositeCommand(
 
     @SubCommand("reload","重载")
     fun CommandSender.reload() {
-//        Configuration.load()
-//        GithubTask.num = 0
-//        Configuration.logger.info("配置文件已重载")
+        overload()
     }
 
 }

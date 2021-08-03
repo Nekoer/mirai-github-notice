@@ -2,18 +2,14 @@ package com.hcyacg
 
 
 import com.hcyacg.command.Github
-import com.hcyacg.initial.Configuration
-import com.hcyacg.initial.Configuration.Companion.init
+import com.hcyacg.initial.Configurations.Companion.init
 
 
 import net.mamoe.mirai.console.command.CommandManager
 
 import net.mamoe.mirai.console.extension.PluginComponentStorage
-import net.mamoe.mirai.console.plugin.info
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
-import net.mamoe.mirai.event.GlobalEventChannel
-import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.utils.info
 
 
@@ -32,10 +28,10 @@ object GithubNotice : KotlinPlugin(
 
     override fun onEnable() {
         CommandManager.registerCommand(Github(),true)
-        logger.info { "Plugin loaded" }
-        GlobalEventChannel.subscribeAlways<GroupMessageEvent> { event ->
+        logger.info { "github更新通知 loaded" }
+//        GlobalEventChannel.subscribeAlways<GroupMessageEvent> { event ->
 //            GithubTask.event = event
-        }
+//        }
     }
 
 
