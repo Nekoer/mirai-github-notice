@@ -35,29 +35,34 @@ class GithubTask {
     @OptIn(DelicateCoroutinesApi::class)
     fun openTask(event: CommandSender) {
         logger.info("Github推送通知已开启")
-        time.purge()
+        try{
+            time.purge()
+            time.schedule(object : TimerTask() {
+                override fun run() {
+                    for ((index, e) in project.withIndex()) {
 
-        time.schedule(object : TimerTask() {
-            override fun run() {
-                for ((index, e) in project.withIndex()) {
-                    val j: JSONObject = JSONObject.parseObject(e.toString())
-                    suspend fun myFunc() = coroutineScope {
-                        launch {
-                            Commits().checkUpdate(
-                                event = event,
-                                projects = j["name"],
-                                branch = j["branch"],
-                                index = index
-                            )
+                        val j: JSONObject = JSONObject.parseObject(e.toString())
+                        suspend fun myFunc() = coroutineScope {
+                            launch {
+                                Commits().checkUpdate(
+                                    event = event,
+                                    projects = j["name"],
+                                    branch = j["branch"],
+                                    index = index
+                                )
+                            }
                         }
                     }
+                    if (!switch) {
+                        this.cancel()
+                        logger.info("Github推送通知已关闭")
+                    }
                 }
-                if (!switch) {
-                    this.cancel()
-                    logger.info("Github推送通知已关闭")
-                }
-            }
-        }, Date(), 5000)
+            }, Date(), 5000)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
     }
 
 }

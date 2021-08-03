@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject
 import com.hcyacg.GithubNotice
 import com.hcyacg.GithubTask
 import com.hcyacg.GithubTask.Companion.groups
+import com.hcyacg.GithubTask.Companion.logger
 import com.hcyacg.GithubTask.Companion.num
 import com.hcyacg.GithubTask.Companion.project
 import com.hcyacg.GithubTask.Companion.sha
@@ -46,6 +47,8 @@ class Commits {
         var stA: String? = null
         var sha1: Any? = null
         var response: Response? = null
+        logger.warning("${projects.toString()} => ${branch.toString()}")
+
 
         try {
             val request: Request = Request.Builder()

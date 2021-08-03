@@ -20,14 +20,7 @@ class Github : CompositeCommand(
     var logger: MiraiLogger = MiraiLogger.create("Bot")
 
     @SubCommand("start","启动")
-    suspend fun CommandSender.start() {
-        val sourceMessage = (this as? CommandSenderOnMessage<*>)?.fromEvent?.message
-        if (sourceMessage != null) {
-
-            sendMessage(sourceMessage.quote() + "OK")
-        } else {
-            sendMessage("OK")
-        }
+    fun CommandSender.start() {
         switch = true
         GithubTask().openTask(this)
     }
