@@ -91,7 +91,7 @@ class Commits {
 
                     for (e in groups) {
 
-                        logger.warning("${null != event.bot?.getGroup(e.toString().toLong())}")
+                        logger.warning("${null != event.bot!!.getGroup(e.toString().toLong())} => ${event.bot!!.getGroup(e.toString().toLong())}")
                         //BUG注 需判断该机器人群组是否存在该群
                         if (null != event.bot?.getGroup(e.toString().toLong())) {
                             event.bot?.getGroup(e.toString().toLong())?.sendMessage(
