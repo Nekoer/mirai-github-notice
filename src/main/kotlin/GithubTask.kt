@@ -4,14 +4,12 @@ package com.hcyacg
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.hcyacg.entity.Branch
-import com.hcyacg.github.Branches
+import com.hcyacg.github.*
 
 
-import com.hcyacg.github.Commits
-import com.hcyacg.github.Issues
-import com.hcyacg.github.Releases
 import entity.Issue
 import entity.IssueItem
+import entity.PullItem
 import entity.Release
 import kotlinx.coroutines.*
 import net.mamoe.mirai.console.command.CommandSender
@@ -35,6 +33,7 @@ class GithubTask {
         var branches  = HashMap<String,List<Branch>>()
         var releases  = HashMap<String,Release>()
         var issueItem  = HashMap<String,IssueItem>()
+        var pullItem  = HashMap<String,PullItem>()
         var all:Int = 0
         var taskMillisecond:Long = 5000
 
@@ -68,6 +67,9 @@ class GithubTask {
                             )
 
                             Issues().checkIssuesUpdate(
+                                projects = e
+                            )
+                            Pulls().checkPullsUpdate(
                                 projects = e
                             )
 
