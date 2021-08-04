@@ -76,7 +76,7 @@ class Releases {
                             html = release.htmlUrl.toString(),
                             avatar = release.author!!.avatarUrl.toString(),
                             time = time.toString(),
-                            name = release.assets!![0]!!.uploader!!.login.toString()
+                            name = release.assets!![0]!!.uploader!!.login.toString()+ "更新了版本"
                         )
                     )
                 }
@@ -90,7 +90,7 @@ class Releases {
                             html = release.htmlUrl.toString(),
                             avatar = release.author!!.avatarUrl.toString(),
                             time = time.toString(),
-                            name = release.assets!![0]!!.uploader!!.login.toString()
+                            name = release.assets!![0]!!.uploader!!.login.toString() + "更新了版本"
                         )
                     )
                 }

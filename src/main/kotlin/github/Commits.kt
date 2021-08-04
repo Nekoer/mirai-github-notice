@@ -110,7 +110,7 @@ class Commits {
                                     html = html.toString(),
                                     avatar = avatar.toString(),
                                     time = time.toString(),
-                                    name = name.toString()
+                                    name = name.toString()+ "推送了代码"
                                 )
                             )
                         }
@@ -124,7 +124,7 @@ class Commits {
                                     html = html.toString(),
                                     avatar = avatar.toString(),
                                     time = time.toString(),
-                                    name = name.toString()
+                                    name = name.toString()+ "推送了代码"
                                 )
                             )
                         }
