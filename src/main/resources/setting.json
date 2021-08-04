@@ -3,7 +3,7 @@
     123456,
     2222
   ],
-  "task-millisecond": 5000,
+  "task-millisecond": 30000,
   "token": "githubToken",
   "project": [
       "作者/仓库名"

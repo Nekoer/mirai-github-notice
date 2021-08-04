@@ -15,11 +15,13 @@ import com.hcyacg.GithubTask.Companion.token
 import com.hcyacg.GithubTask.Companion.users
 import com.hcyacg.github.Branches
 import kotlinx.coroutines.runBlocking
+import net.mamoe.mirai.console.plugin.name
 
 import net.mamoe.mirai.utils.MiraiLogger
 
 import java.io.File
 import java.io.InputStream
+import kotlin.math.log
 
 class Configurations {
     companion object {
@@ -64,40 +66,50 @@ class Configurations {
          * 加载配置文件
          */
         fun load() {
-            projectJson = JSONObject.parseObject(file.readText())
-
-            project = JSON.parseArray(projectJson.getString("project"))
-            for (e in project) {
-                sha[e.toString()] = ""
-            }
-
-
-            groups = JSON.parseArray(projectJson.getString("group"))
-            for ((index, e) in groups.withIndex()) {
-                groups[index] = e.toString()
-            }
-            admin = JSON.parseArray(projectJson.getString("admin"))
-            for ((index, e) in admin.withIndex()) {
-                admin[index] = e.toString()
-            }
-            users = JSON.parseArray(projectJson.getString("users"))
-            for ((index, e) in users.withIndex()) {
-                users[index] = e.toString()
-            }
-
-            token = projectJson.getString("token")
-            taskMillisecond = projectJson.getLong("task-millisecond")
-
-
             runBlocking {
-                branches = Branches().getBranchesByRepo(project)
-            }
-            GithubTask.all = 0
-            for (p in project){
-                GithubTask.all += branches[p]!!.size
-            }
+                projectJson = JSONObject.parseObject(file.readText())
 
-            GithubNotice.logger.info("加载配置完成 共${GithubTask.all}个分支")
+                project = JSON.parseArray(projectJson.getString("project"))
+                for (e in project) {
+                    sha[e.toString()] = ""
+                }
+
+
+                groups = JSON.parseArray(projectJson.getString("group"))
+                for ((index, e) in groups.withIndex()) {
+                    groups[index] = e.toString()
+                }
+                admin = JSON.parseArray(projectJson.getString("admin"))
+                for ((index, e) in admin.withIndex()) {
+                    admin[index] = e.toString()
+                }
+                users = JSON.parseArray(projectJson.getString("users"))
+                for ((index, e) in users.withIndex()) {
+                    users[index] = e.toString()
+                }
+
+                token = projectJson.getString("token")
+                taskMillisecond = projectJson.getLong("task-millisecond")
+
+
+
+                branches = try {
+                    Branches().getBranchesByRepo(project)
+                } catch (e: Exception) {
+                    Branches().getBranchesByRepo(project)
+                }
+
+                GithubTask.all = 0
+                for (p in project) {
+                    GithubTask.all += branches[p]!!.size
+                }
+                if (GithubTask.all == 0) {
+                    logger.warning("[${GithubNotice.name}]加载配置完成,共【${GithubTask.all}】个分支,请检查是否配置完成,或检查网络问题")
+                } else {
+                    logger.info("[${GithubNotice.name}]加载配置完成,共【${GithubTask.all}】个分支")
+                }
+                logger.info("[${GithubNotice.name}]请不要开启插件后立即上传代码,插件需要一段时间获取所有项目的分支相关数据")
+            }
         }
     }
 

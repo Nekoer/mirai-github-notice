@@ -1,11 +1,9 @@
 package com.hcyacg
 
 
-import com.hcyacg.GithubTask.Companion.all
 import com.hcyacg.command.Github
 
-import com.hcyacg.github.RateLimit
-import com.hcyacg.initial.Configurations
+import com.hcyacg.github.RateLimits
 import com.hcyacg.initial.Configurations.Companion.init
 
 
@@ -34,12 +32,12 @@ object GithubNotice : KotlinPlugin(
 
 
     override fun onEnable() {
-        CommandManager.registerCommand(Github(),true)
         logger.info { "github更新通知 loaded" }
+        CommandManager.registerCommand(Github(),true)
         GlobalEventChannel.subscribeAlways<GroupMessageEvent> { event ->
 
             if (event.message.content.indexOf("/github rate_limit")>= 0){
-                RateLimit().getRateLimit(event)
+                RateLimits().getRateLimit(event)
             }
 
         }

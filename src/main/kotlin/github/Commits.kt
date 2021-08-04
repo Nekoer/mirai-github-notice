@@ -26,6 +26,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.internal.closeQuietly
+import java.net.ConnectException
+import java.net.SocketTimeoutException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -38,7 +40,7 @@ class Commits {
     /**
      * 检查github推送更新
      */
-    suspend fun checkUpdate(
+    suspend fun checkCommitUpdate(
         projects: Any?,
         branch: Any?,
     ) {
@@ -52,10 +54,17 @@ class Commits {
 //        logger.warning("${projects.toString()} => ${branch.toString()}")
         val bots = Bot.instances
         try {
-            val request: Request = Request.Builder()
-                .url("https://api.github.com/repos/${projects.toString()}/commits/${branch.toString()}")
-                .addHeader("Authorization", "token $token")
-                .addHeader("Accept", "application/vnd.github.v3+json").build()
+            val request = if (RateLimits().isResidue()){
+                Request.Builder()
+                    .url("https://api.github.com/repos/${projects.toString()}/commits/${branch.toString()}")
+                    .addHeader("Authorization", "token $token")
+                    .addHeader("Accept", "application/vnd.github.v3+json").build()
+            }else{
+                Request.Builder()
+                    .url("https://api.github.com/repos/${projects.toString()}/commits/${branch.toString()}")
+                    .addHeader("Accept", "application/vnd.github.v3+json").build()
+            }
+
             response = client.build().newCall(request).execute()
 
             if (response.isSuccessful) {
@@ -93,7 +102,6 @@ class Commits {
                 val committers: Any? = jsonObject["committer"]
                 avatar = JSONObject.parseObject(committers.toString())["avatar_url"]
 
-
                     for (e in groups) {
                         for (bot in bots){
                             bot.getGroup(e.toString().toLong())?.sendMessage(
@@ -105,11 +113,7 @@ class Commits {
                                     name = name.toString()
                                 )
                             )
-
-
                         }
-                        //BUG注 需判断该机器人群组是否存在该群
-//                        event.bot.getGroup(e.toString().toLong())?.sendMessage("${name}推送了代码\n${message}\n${time}\n${html}")
                     }
 
                     for (u in users) {
@@ -124,13 +128,18 @@ class Commits {
                                 )
                             )
                         }
-
                     }
-
             }
-            response.closeQuietly()
+        }catch (e: SocketTimeoutException){
+            logger.warning("请求超时")
+            return
+        }catch (e: ConnectException){
+            logger.warning("无法连接到api.github.com")
+            return
         } catch (e: Exception) {
             e.printStackTrace()
+        }finally {
+            response?.closeQuietly()
         }
     }
 

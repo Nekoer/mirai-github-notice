@@ -1,16 +1,21 @@
 package com.hcyacg.github
 
 import com.alibaba.fastjson.JSONObject
+import com.hcyacg.GithubTask
 import com.hcyacg.GithubTask.Companion.token
+import com.hcyacg.entity.RateLimit
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.utils.MiraiLogger
 import okhttp3.*
+import okhttp3.internal.closeQuietly
+import java.net.ConnectException
+import java.net.SocketTimeoutException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class RateLimit {
+class RateLimits {
     val logger: MiraiLogger = MiraiLogger.create("Bot")
     private val headers =
         Headers.Builder().add("Accept", "application/vnd.github.v3+json").add("Authorization", "token $token")
@@ -57,4 +62,37 @@ class RateLimit {
     }
 
 
+    fun isResidue():Boolean{
+        var rateLimit: RateLimit? = null
+//        var data: String? = null
+        var response: Response? = null
+        try {
+
+            val request: Request = Request.Builder()
+                .url("https://api.github.com/rate_limit")
+                .addHeader("Authorization", "token $token")
+                .addHeader("Accept", "application/vnd.github.v3+json").build()
+            response = client.build().newCall(request).execute()
+
+            if (response.isSuccessful) {
+                rateLimit = JSONObject.parseObject(response.body?.string(),RateLimit::class.java)
+            }
+
+            if (rateLimit?.rate?.remaining!! < 1){
+                logger.warning("Github速率限制次数已用完,请稍后尝试")
+            }
+            return rateLimit.rate!!.remaining!! >= 1
+        }catch (e: SocketTimeoutException){
+            logger.warning("请求超时")
+            return  isResidue()
+        } catch (e: ConnectException){
+            logger.warning("无法连接到api.github.com")
+            return  isResidue()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return  false
+        }finally {
+            response?.closeQuietly()
+        }
+    }
 }

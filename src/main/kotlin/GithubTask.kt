@@ -8,6 +8,8 @@ import com.hcyacg.github.Branches
 
 
 import com.hcyacg.github.Commits
+import com.hcyacg.github.Releases
+import entity.Release
 import kotlinx.coroutines.*
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.event.events.GroupMessageEvent
@@ -28,6 +30,7 @@ class GithubTask {
         var admin: JSONArray = JSONArray.parseArray("[]")
         var project: JSONArray = JSONArray.parseArray("[]")
         var branches  = HashMap<String,List<Branch>>()
+        var releases  = HashMap<String,Release>()
         var all:Int = 0
         var taskMillisecond:Long = 5000
 
@@ -47,16 +50,18 @@ class GithubTask {
             time.schedule(object : TimerTask() {
                 override fun run() {
                     for (e in project) {
-//                        val j: JSONObject = JSONObject.parseObject(e.toString())
                         runBlocking{
                             val list: List<Branch> = branches[e.toString()]!!
                             for (o in list){
-//                                logger.warning(o.toString())
-                                Commits().checkUpdate(
+                                Commits().checkCommitUpdate(
                                     projects = e,
                                     branch = o.name,
                                 )
+
                             }
+                            Releases().checkReleaseUpdate(
+                                projects = e,
+                            )
 
                         }
                     }

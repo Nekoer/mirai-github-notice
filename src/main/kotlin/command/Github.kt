@@ -3,8 +3,6 @@ package com.hcyacg.command
 import com.hcyacg.GithubNotice
 import com.hcyacg.GithubTask
 import com.hcyacg.GithubTask.Companion.switch
-import com.hcyacg.github.RateLimit
-import com.hcyacg.initial.Configurations
 import com.hcyacg.initial.Configurations.Companion.overload
 
 
