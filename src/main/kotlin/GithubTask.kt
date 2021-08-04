@@ -8,7 +8,10 @@ import com.hcyacg.github.Branches
 
 
 import com.hcyacg.github.Commits
+import com.hcyacg.github.Issues
 import com.hcyacg.github.Releases
+import entity.Issue
+import entity.IssueItem
 import entity.Release
 import kotlinx.coroutines.*
 import net.mamoe.mirai.console.command.CommandSender
@@ -31,6 +34,7 @@ class GithubTask {
         var project: JSONArray = JSONArray.parseArray("[]")
         var branches  = HashMap<String,List<Branch>>()
         var releases  = HashMap<String,Release>()
+        var issueItem  = HashMap<String,IssueItem>()
         var all:Int = 0
         var taskMillisecond:Long = 5000
 
@@ -61,6 +65,10 @@ class GithubTask {
                             }
                             Releases().checkReleaseUpdate(
                                 projects = e,
+                            )
+
+                            Issues().checkIssuesUpdate(
+                                projects = e
                             )
 
                         }
