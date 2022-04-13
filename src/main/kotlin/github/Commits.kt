@@ -12,11 +12,14 @@ import com.hcyacg.GithubTask.Companion.project
 import com.hcyacg.GithubTask.Companion.sha
 import com.hcyacg.GithubTask.Companion.token
 import com.hcyacg.GithubTask.Companion.users
+import com.hcyacg.utils.CardUtil
 
 
 import net.mamoe.mirai.Bot
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.getGroupOrNull
+import net.mamoe.mirai.console.util.ConsoleExperimentalApi
+import net.mamoe.mirai.console.util.ContactUtils.getFriendOrGroup
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.message.data.LightApp
@@ -41,6 +44,7 @@ class Commits {
     /**
      * 检查github推送更新
      */
+    @OptIn(ConsoleExperimentalApi::class)
     suspend fun checkCommitUpdate(
         projects: Any?,
         branch: Any?,
@@ -106,12 +110,13 @@ class Commits {
                     for (e in groups) {
                         for (bot in bots){
                             bot.getGroup(e.toString().toLong())?.sendMessage(
-                                process(
+                                CardUtil().process(
                                     message = message.toString(),
                                     html = html.toString(),
                                     avatar = avatar.toString(),
                                     time = time.toString(),
-                                    name = name.toString()+ "推送了代码"
+                                    name = name.toString()+ "推送了代码",
+                                    event = bot.getFriendOrGroup(e.toString().toLong())
                                 )
                             )
                         }
@@ -120,12 +125,13 @@ class Commits {
                     for (u in users) {
                         for (bot in bots){
                             bot.getStranger(u.toString().toLong())?.sendMessage(
-                                process(
+                                CardUtil().process(
                                     message = message.toString(),
                                     html = html.toString(),
                                     avatar = avatar.toString(),
                                     time = time.toString(),
-                                    name = name.toString()+ "推送了代码"
+                                    name = name.toString()+ "推送了代码",
+                                    event = bot.getFriendOrGroup(u.toString().toLong())
                                 )
                             )
                         }
