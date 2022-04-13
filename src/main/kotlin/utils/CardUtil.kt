@@ -33,16 +33,8 @@ class CardUtil {
         }
 
 
-        val builder = Image.Builder.newBuilder(imageId)
-        builder.height = 50
-        builder.width = 50
 
-        builder.type = ImageType.PNG
-
-        val image = builder.build();
-
-
-        return image.plus(name).plus("\n")
+        return Image(imageId).plus(name).plus("\n")
             .plus("时间：$time").plus("\n")
             .plus("介绍：$message").plus("\n")
             .plus("网址：$html").plus("\n")

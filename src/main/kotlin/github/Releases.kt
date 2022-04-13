@@ -79,7 +79,7 @@ class Releases {
                             html = release.htmlUrl.toString(),
                             avatar = release.author!!.avatarUrl.toString(),
                             time = time.toString(),
-                            name = release.assets!![0]!!.uploader!!.login.toString()+ "更新了版本",
+                            name = release.assets!![0]!!.uploader!!.login.toString()+ "为${projects.toString()}更新了版本",
                             event = bot.getFriendOrGroup(e.toString().toLong())
                         )
                     )
@@ -94,7 +94,7 @@ class Releases {
                             html = release.htmlUrl.toString(),
                             avatar = release.author!!.avatarUrl.toString(),
                             time = time.toString(),
-                            name = release.assets!![0]!!.uploader!!.login.toString() + "更新了版本",
+                            name = release.assets!![0]!!.uploader!!.login.toString() + "为${projects.toString()}更新了版本",
                             event = bot.getFriendOrGroup(u.toString().toLong())
                         )
                     )

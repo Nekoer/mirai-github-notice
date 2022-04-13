@@ -45,7 +45,6 @@ class GithubTask {
     var timerTask: TimerTask? = null
 
 
-    @OptIn(DelicateCoroutinesApi::class)
     suspend fun openTask() {
         logger.info("Github推送通知已开启")
         try{

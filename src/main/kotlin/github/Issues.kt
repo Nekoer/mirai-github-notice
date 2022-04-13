@@ -82,7 +82,7 @@ class Issues {
                             html = issueItem.htmlUrl.toString(),
                             avatar = issueItem.user!!.avatarUrl.toString(),
                             time = time.toString(),
-                            name = issueItem.user.login.toString()+ "提交了新问题",
+                            name = issueItem.user.login.toString()+ "为${projects.toString()}提交了新问题",
                             event = bot.getFriendOrGroup(e.toString().toLong())
                         )
                     )
@@ -97,7 +97,7 @@ class Issues {
                             html = issueItem.htmlUrl.toString(),
                             avatar = issueItem.user!!.avatarUrl.toString(),
                             time = time.toString(),
-                            name = issueItem.user.login.toString()+ "提交了新问题",
+                            name = issueItem.user.login.toString()+ "为${projects.toString()}提交了新问题",
                             event = bot.getFriendOrGroup(u.toString().toLong())
                         )
                     )
