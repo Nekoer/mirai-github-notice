@@ -20,7 +20,7 @@ class Branches {
     private val headers =
         Headers.Builder().add("Accept", "application/vnd.github.v3+json").add("Authorization", "token ${GithubTask.token}")
     private val requestBody: RequestBody? = null
-    val logger:MiraiLogger = MiraiLogger.create("Bot")
+    val logger:MiraiLogger = MiraiLogger.Factory.create(Branches::class, "Bot")
     private val client = OkHttpClient().newBuilder().connectTimeout(60000, TimeUnit.MILLISECONDS)
         .readTimeout(60000, TimeUnit.MILLISECONDS)
 
@@ -79,7 +79,7 @@ class Branches {
             e.printStackTrace()
             return getBranchesByRepo(projects)
         }finally {
-            response?.closeQuietly()
+            response?.close()
         }
     }
 

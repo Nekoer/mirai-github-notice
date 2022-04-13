@@ -28,10 +28,10 @@ class Configurations {
         private val systemPath: String = System.getProperty("user.dir")
         private val fileDirectory: File =
             File(systemPath + File.separator + "config" + File.separator + "com.hcyacg.github-notice")
-        val file: File = File(fileDirectory.path + File.separator + "setting.json")
-        var projectJson: JSONObject = JSONObject.parseObject("{}")
+        private val file: File = File(fileDirectory.path + File.separator + "setting.json")
+        private var projectJson: JSONObject = JSONObject.parseObject("{}")
         val path: String = Configurations::class.java.protectionDomain.codeSource.location.path
-        var logger: MiraiLogger = MiraiLogger.create("Bot")
+        var logger: MiraiLogger = MiraiLogger.Factory.create(this::class, "Bot")
 
         /**
          * 初始化插件各项配置

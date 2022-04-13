@@ -16,7 +16,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class RateLimits {
-    val logger: MiraiLogger = MiraiLogger.create("Bot")
+    val logger: MiraiLogger = MiraiLogger.Factory.create(RateLimits::class, "Bot")
     private val headers =
         Headers.Builder().add("Accept", "application/vnd.github.v3+json").add("Authorization", "token $token")
     private val requestBody: RequestBody? = null
@@ -92,7 +92,7 @@ class RateLimits {
             e.printStackTrace()
             return  false
         }finally {
-            response?.closeQuietly()
+            response?.close()
         }
     }
 }

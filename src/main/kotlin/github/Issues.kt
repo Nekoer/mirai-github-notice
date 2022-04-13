@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class Issues {
-    val logger: MiraiLogger = MiraiLogger.create("Bot")
+    val logger: MiraiLogger = MiraiLogger.Factory.create(Issues::class, "Bot")
     private val headers = Headers.Builder().add("Accept","application/vnd.github.v3+json").add("Authorization","token ${GithubTask.token}")
     private val requestBody: RequestBody? = null
 

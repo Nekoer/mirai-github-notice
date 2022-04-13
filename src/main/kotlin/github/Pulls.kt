@@ -18,7 +18,7 @@ import java.util.*
 
 class Pulls {
 
-    val logger: MiraiLogger = MiraiLogger.create("Bot")
+    val logger: MiraiLogger = MiraiLogger.Factory.create(Pulls::class, "Bot")
     private val headers = Headers.Builder().add("Accept","application/vnd.github.v3+json").add("Authorization","token ${GithubTask.token}")
     private val requestBody: RequestBody? = null
 

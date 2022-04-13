@@ -139,7 +139,7 @@ class Commits {
         } catch (e: Exception) {
             e.printStackTrace()
         }finally {
-            response?.closeQuietly()
+            response?.close()
         }
     }
 

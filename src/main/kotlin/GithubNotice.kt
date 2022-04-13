@@ -14,6 +14,8 @@ import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.event.globalEventChannel
+import net.mamoe.mirai.event.subscribeGroupMessages
 import net.mamoe.mirai.message.data.content
 import net.mamoe.mirai.utils.info
 
@@ -31,15 +33,12 @@ object GithubNotice : KotlinPlugin(
 
 
 
+
     override fun onEnable() {
         logger.info { "github更新通知 loaded" }
         CommandManager.registerCommand(Github(),true)
-        GlobalEventChannel.subscribeAlways<GroupMessageEvent> { event ->
-
-            if (event.message.content.indexOf("/github rate_limit")>= 0){
-                RateLimits().getRateLimit(event)
-            }
-
+        globalEventChannel().subscribeGroupMessages{
+            content { "/github rate_limit".contentEquals(message.contentToString()) } quoteReply { RateLimits().getRateLimit(this) }
         }
     }
 

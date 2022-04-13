@@ -21,7 +21,7 @@ import java.util.*
 class GithubTask {
     companion object {
         var switch: Boolean = false
-        var logger: MiraiLogger = MiraiLogger.create("Bot")
+        var logger: MiraiLogger = MiraiLogger.Factory.create(GithubTask::class, "Bot")
         var sha = HashMap<String, String>()
         var num: Int = 0
         var projectJson: JSONObject = JSONObject.parseObject("{}")

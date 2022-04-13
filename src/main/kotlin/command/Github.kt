@@ -14,7 +14,7 @@ class Github : CompositeCommand(
     "github",
     description = "github"
 ) {
-    var logger: MiraiLogger = MiraiLogger.create("Bot")
+    var logger: MiraiLogger = MiraiLogger.Factory.create(Github::class, "Bot")
 
     @SubCommand("start","启动")
     @Description("开启监控")
