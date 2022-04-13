@@ -9,6 +9,8 @@ import com.hcyacg.utils.CardUtil
 import com.hcyacg.utils.HttpUtil
 import entity.Release
 import net.mamoe.mirai.Bot
+import net.mamoe.mirai.console.util.ConsoleExperimentalApi
+import net.mamoe.mirai.console.util.ContactUtils.getFriendOrGroup
 import net.mamoe.mirai.console.util.cast
 import net.mamoe.mirai.utils.MiraiLogger
 import net.mamoe.mirai.utils.info
@@ -27,6 +29,7 @@ class Releases {
     private val headers = Headers.Builder().add("Accept","application/vnd.github.v3+json").add("Authorization","token $token")
     private val requestBody: RequestBody? = null
 
+    @OptIn(ConsoleExperimentalApi::class)
     suspend fun checkReleaseUpdate(
         projects: Any?,
     ){
@@ -76,7 +79,8 @@ class Releases {
                             html = release.htmlUrl.toString(),
                             avatar = release.author!!.avatarUrl.toString(),
                             time = time.toString(),
-                            name = release.assets!![0]!!.uploader!!.login.toString()+ "更新了版本"
+                            name = release.assets!![0]!!.uploader!!.login.toString()+ "更新了版本",
+                            event = bot.getFriendOrGroup(e.toString().toLong())
                         )
                     )
                 }
@@ -90,7 +94,8 @@ class Releases {
                             html = release.htmlUrl.toString(),
                             avatar = release.author!!.avatarUrl.toString(),
                             time = time.toString(),
-                            name = release.assets!![0]!!.uploader!!.login.toString() + "更新了版本"
+                            name = release.assets!![0]!!.uploader!!.login.toString() + "更新了版本",
+                            event = bot.getFriendOrGroup(u.toString().toLong())
                         )
                     )
                 }

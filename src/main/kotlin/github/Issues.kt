@@ -9,6 +9,8 @@ import entity.Issue
 import entity.IssueItem
 import entity.Release
 import net.mamoe.mirai.Bot
+import net.mamoe.mirai.console.util.ConsoleExperimentalApi
+import net.mamoe.mirai.console.util.ContactUtils.getFriendOrGroup
 import net.mamoe.mirai.utils.MiraiLogger
 import okhttp3.Headers
 import okhttp3.RequestBody
@@ -22,6 +24,7 @@ class Issues {
     private val headers = Headers.Builder().add("Accept","application/vnd.github.v3+json").add("Authorization","token ${GithubTask.token}")
     private val requestBody: RequestBody? = null
 
+    @OptIn(ConsoleExperimentalApi::class)
     suspend fun checkIssuesUpdate(
         projects: Any?
     ){
@@ -72,13 +75,15 @@ class Issues {
 
             for (e in GithubTask.groups) {
                 for (bot in bots){
+
                     bot.getGroup(e.toString().toLong())?.sendMessage(
                         CardUtil().process(
                             message = issueItem.body.toString(),
                             html = issueItem.htmlUrl.toString(),
                             avatar = issueItem.user!!.avatarUrl.toString(),
                             time = time.toString(),
-                            name = issueItem.user.login.toString()+ "提交了新问题"
+                            name = issueItem.user.login.toString()+ "提交了新问题",
+                            event = bot.getFriendOrGroup(e.toString().toLong())
                         )
                     )
                 }
@@ -92,7 +97,8 @@ class Issues {
                             html = issueItem.htmlUrl.toString(),
                             avatar = issueItem.user!!.avatarUrl.toString(),
                             time = time.toString(),
-                            name = issueItem.user.login.toString()+ "提交了新问题"
+                            name = issueItem.user.login.toString()+ "提交了新问题",
+                            event = bot.getFriendOrGroup(u.toString().toLong())
                         )
                     )
                 }

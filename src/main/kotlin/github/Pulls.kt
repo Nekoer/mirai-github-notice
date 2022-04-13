@@ -8,6 +8,8 @@ import com.hcyacg.utils.HttpUtil
 import entity.IssueItem
 import entity.PullItem
 import net.mamoe.mirai.Bot
+import net.mamoe.mirai.console.util.ConsoleExperimentalApi
+import net.mamoe.mirai.console.util.ContactUtils.getFriendOrGroup
 import net.mamoe.mirai.utils.MiraiLogger
 import okhttp3.Headers
 import okhttp3.RequestBody
@@ -22,6 +24,7 @@ class Pulls {
     private val headers = Headers.Builder().add("Accept","application/vnd.github.v3+json").add("Authorization","token ${GithubTask.token}")
     private val requestBody: RequestBody? = null
 
+    @OptIn(ConsoleExperimentalApi::class)
     suspend fun checkPullsUpdate(
         projects: Any?
     ){
@@ -78,7 +81,8 @@ class Pulls {
                             html = pullItem.htmlUrl.toString(),
                             avatar = pullItem.user!!.avatarUrl.toString(),
                             time = time.toString(),
-                            name = pullItem.user.login.toString()+ "发起了合并请求"
+                            name = pullItem.user.login.toString()+ "发起了合并请求",
+                            event = bot.getFriendOrGroup(e.toString().toLong())
                         )
                     )
                 }
@@ -92,7 +96,8 @@ class Pulls {
                             html = pullItem.htmlUrl.toString(),
                             avatar = pullItem.user!!.avatarUrl.toString(),
                             time = time.toString(),
-                            name = pullItem.user.login.toString()+ "发起了合并请求"
+                            name = pullItem.user.login.toString()+ "发起了合并请求",
+                            event = bot.getFriendOrGroup(u.toString().toLong())
                         )
                     )
                 }
