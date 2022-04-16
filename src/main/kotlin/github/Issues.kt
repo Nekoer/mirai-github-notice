@@ -78,7 +78,7 @@ class Issues {
 
                     bot.getGroup(e.toString().toLong())?.sendMessage(
                         CardUtil().process(
-                            message = issueItem.body.toString(),
+                            message = issueItem.title.toString(),
                             html = issueItem.htmlUrl.toString(),
                             avatar = issueItem.user!!.avatarUrl.toString(),
                             time = time.toString(),
@@ -93,7 +93,7 @@ class Issues {
                 for (bot in bots){
                     bot.getStranger(u.toString().toLong())?.sendMessage(
                         CardUtil().process(
-                            message = issueItem.body.toString(),
+                            message = issueItem.title.toString(),
                             html = issueItem.htmlUrl.toString(),
                             avatar = issueItem.user!!.avatarUrl.toString(),
                             time = time.toString(),

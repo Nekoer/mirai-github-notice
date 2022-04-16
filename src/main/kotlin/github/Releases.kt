@@ -75,7 +75,7 @@ class Releases {
                 for (bot in bots){
                     bot.getGroup(e.toString().toLong())?.sendMessage(
                         CardUtil().process(
-                            message = release.body.toString(),
+                            message = release.name.toString(),
                             html = release.htmlUrl.toString(),
                             avatar = release.author!!.avatarUrl.toString(),
                             time = time.toString(),
@@ -90,7 +90,7 @@ class Releases {
                 for (bot in bots){
                     bot.getStranger(u.toString().toLong())?.sendMessage(
                         CardUtil().process(
-                            message = release.body.toString(),
+                            message = release.name.toString(),
                             html = release.htmlUrl.toString(),
                             avatar = release.author!!.avatarUrl.toString(),
                             time = time.toString(),

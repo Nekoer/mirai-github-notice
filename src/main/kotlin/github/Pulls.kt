@@ -77,7 +77,7 @@ class Pulls {
                 for (bot in bots){
                     bot.getGroup(e.toString().toLong())?.sendMessage(
                         CardUtil().process(
-                            message = pullItem.body.toString(),
+                            message = pullItem.title.toString(),
                             html = pullItem.htmlUrl.toString(),
                             avatar = pullItem.user!!.avatarUrl.toString(),
                             time = time.toString(),
@@ -92,7 +92,7 @@ class Pulls {
                 for (bot in bots){
                     bot.getStranger(u.toString().toLong())?.sendMessage(
                         CardUtil().process(
-                            message = pullItem.body.toString(),
+                            message = pullItem.title.toString(),
                             html = pullItem.htmlUrl.toString(),
                             avatar = pullItem.user!!.avatarUrl.toString(),
                             time = time.toString(),

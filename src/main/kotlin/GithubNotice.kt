@@ -24,7 +24,7 @@ object GithubNotice : KotlinPlugin(
     JvmPluginDescription(
         id = "com.hcyacg.github-notice",
         name = "github更新通知",
-        version = "1.6",
+        version = "1.6.1",
     ) {
         author("Nekoer")
         info("""github更新通知""")
